@@ -1,1 +1,6 @@
-<%= @bookmarks.first %>
+<% @bookmarks.each do |bookmark| %>
+<p>
+<%= bookmark %>
+</p>
+<% end %>
+

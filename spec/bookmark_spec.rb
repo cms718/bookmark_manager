@@ -5,7 +5,7 @@ require 'bookmark'
 describe Bookmark do
   describe '.all' do
     it 'returns an array of bookmarks' do
-      expect(Bookmark.all).to eq(['google.com'])
+      expect(Bookmark.all.include?('http://www.google.com')).to eq(true)
     end
   end
 end
