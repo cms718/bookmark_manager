@@ -4,8 +4,13 @@ require 'pg'
 
 class Bookmark
   def self.all
-    conn = PG.connect(dbname: 'bookmark_manager', user: 'charlieslater')
+    conn = if ENV['ENVIRONMENT'] == 'test'
+             PG.connect(dbname: 'bookmark_manager_test', user: 'charlieslater')
+           else
+             PG.connect(dbname: 'bookmark_manager', user: 'charlieslater')
+           end
+
     rows = conn.exec('SELECT * FROM bookmarks')
-    rows.map { |row| row['url'] }
+    rows.map { |bookmark| bookmark['url'] }
   end
 end
