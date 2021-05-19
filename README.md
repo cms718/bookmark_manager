@@ -8,9 +8,19 @@ This project is ongoing and looks to build a bookmark manager with persistant st
 As a user
 So that I can quickly go to web sites I regularly visit
 I would like to see a list of my bookmarks
+
+As a user
+So that I can remember a page I like
+I would like to add a bookmark to my homepage
 ```
 
 ## Domain Model Diagram
+
+user->controller:"/bookmarks"
+controller->model:".all"
+model->controller:"[bookmarks]"
+controller->view:"[bookmarks]"
+view->controller:"html"
 
 ## How to use
 
