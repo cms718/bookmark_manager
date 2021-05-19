@@ -8,7 +8,8 @@ feature 'Adding a bookmark' do
   scenario 'a bookmark it added to /bookmarks' do
     visit('/add_bookmark')
     fill_in('url', with: 'www.youtube.com')
+    fill_in('title', with: 'Youtube')
     click_button('Save')
-    expect(page).to have_content('www.youtube.com')
+    expect(page).to have_content('Youtube')
   end
 end

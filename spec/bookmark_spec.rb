@@ -5,25 +5,45 @@ require 'bookmark'
 describe Bookmark do
   describe '.all' do
     it 'returns a list of bookmarks' do
-      connection = PG.connect(dbname: 'bookmark_manager_test')
+      Bookmark.create('http://www.makersacademy.com', 'Makers')
+      Bookmark.create('http://www.destroyallsoftware.com', 'Destroy')
+      Bookmark.create('http://www.google.com', 'Google')
 
-      # Add the test data
-      connection.exec("INSERT INTO bookmarks (url) VALUES('http://www.makersacademy.com');")
-      connection.exec("INSERT INTO bookmarks (url) VALUES('http://www.destroyallsoftware.com');")
-      connection.exec("INSERT INTO bookmarks (url) VALUES('http://www.google.com');")
+      conn = PG.connect(dbname: 'bookmark_manager_test', user: 'charlieslater')
+      result = conn.exec('SELECT * FROM bookmarks')
 
       bookmarks = Bookmark.all
 
-      expect(bookmarks).to include('http://www.makersacademy.com')
-      expect(bookmarks).to include('http://www.destroyallsoftware.com')
-      expect(bookmarks).to include('http://www.google.com')
+      expect(bookmarks.first.title).to eq(result.first['title'])
     end
   end
 
   describe '.create' do
     it 'adds a bookmarks to the db' do
-      Bookmark.create('www.test1234.com')
-      expect(Bookmark.all).to include('www.test1234.com')
+      Bookmark.create('www.test1234.com', 'Test')
+      conn = PG.connect(dbname: 'bookmark_manager_test', user: 'charlieslater')
+      result = conn.exec('SELECT * FROM bookmarks')
+      expect(result.first['url']).to eq('www.test1234.com')
+    end
+  end
+
+  describe '.new' do
+    subject { described_class.new(1, 'fakeurl.com', 'fake') }
+
+    describe '#id' do
+      it 'returns the url' do
+        expect(subject.id).to eq(1)
+      end
+    end
+    describe '#url' do
+      it 'returns the url' do
+        expect(subject.url).to eq('fakeurl.com')
+      end
+    end
+    describe '#title' do
+      it 'returns the title' do
+        expect(subject.title).to eq('fake')
+      end
     end
   end
 end
