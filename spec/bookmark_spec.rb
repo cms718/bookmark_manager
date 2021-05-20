@@ -27,6 +27,16 @@ describe Bookmark do
     end
   end
 
+  describe '.delete' do
+    it 'deletes a bookmark from the db' do
+      Bookmark.create('www.test1234.com', 'Test')
+      conn = PG.connect(dbname: 'bookmark_manager_test', user: 'charlieslater')
+      conn.exec("DELETE FROM bookmarks WHERE title='Test'")
+      result = conn.exec('SELECT * FROM bookmarks')
+      expect(result.first).to eq(nil)
+    end
+  end
+
   describe '.new' do
     subject { described_class.new(1, 'fakeurl.com', 'fake') }
 
