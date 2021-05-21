@@ -20,8 +20,18 @@ class BookmarkManager < Sinatra::Base
     erb(:add_bookmark)
   end
 
+  get '/bookmarks/:id/edit' do
+    @id = params[:id]
+    erb(:edit_bookmark)
+  end
+
   post '/bookmarks' do
     Bookmark.create(params['url'], params['title'])
+    redirect('/bookmarks')
+  end
+
+  patch '/bookmarks/:id' do
+    Bookmark.update(params['url'], params['title'], params[:id])
     redirect('/bookmarks')
   end
 

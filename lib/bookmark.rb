@@ -32,6 +32,16 @@ class Bookmark
     conn.exec("DELETE FROM bookmarks WHERE id=#{id}")
   end
 
+  def self.update(url, title, id)
+    conn = if ENV['ENVIRONMENT'] == 'test'
+             PG.connect(dbname: 'bookmark_manager_test', user: 'charlieslater')
+           else
+             PG.connect(dbname: 'bookmark_manager', user: 'charlieslater')
+           end
+
+    conn.exec("UPDATE bookmarks SET url = '#{url}', title = '#{title}' WHERE id = '#{id}'")
+  end
+
   attr_reader :id, :url, :title
 
   def initialize(id, url, title)

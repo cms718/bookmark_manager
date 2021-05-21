@@ -37,6 +37,20 @@ describe Bookmark do
     end
   end
 
+  describe '.update' do
+    it 'updates a bookmark from the db' do
+      Bookmark.create('www.test1234.com', 'Test')
+      
+      conn = PG.connect(dbname: 'bookmark_manager_test', user: 'charlieslater')
+      id = conn.exec('SELECT * FROM bookmarks').first['id']
+      Bookmark.update('youtube.com', 'Youtube', id)
+      
+      result = conn.exec('SELECT * FROM bookmarks')
+
+      expect(result.first['title']).to eq('Youtube')
+    end
+  end
+
   describe '.new' do
     subject { described_class.new(1, 'fakeurl.com', 'fake') }
 
